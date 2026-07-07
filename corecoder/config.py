@@ -30,7 +30,7 @@ class Config:
     model: str = "gpt-5.5"
     api_key: str = ""
     base_url: str | None = None
-    max_tokens: int = 4096
+    max_tokens: int = 8192
     temperature: float = 0.0
     max_context_tokens: int = 128_000
     provider: str = "openai"
@@ -50,7 +50,7 @@ class Config:
             model=os.getenv("CORECODER_MODEL", "gpt-5.5"),
             api_key=api_key,
             base_url=os.getenv("OPENAI_BASE_URL") or os.getenv("CORECODER_BASE_URL"),
-            max_tokens=int(os.getenv("CORECODER_MAX_TOKENS", "4096")),
+            max_tokens=int(os.getenv("CORECODER_MAX_TOKENS", "8192")),
             temperature=float(os.getenv("CORECODER_TEMPERATURE", "0")),
             max_context_tokens=int(os.getenv("CORECODER_MAX_CONTEXT", "128000")),
             provider=os.getenv("CORECODER_PROVIDER", "openai"),

@@ -20,8 +20,14 @@ if TYPE_CHECKING:
 
 
 def _approx_tokens(text: str) -> int:
-    """Rough token count, roughly 3 chars per token for mixed en/zh content."""
-    return len(text) // 3
+    """Rough token count. CJK chars ~1 token each, ASCII ~4 chars/token.
+
+    Tuned for Qwen-family tokenizers where a Chinese character is typically
+    1-2 tokens (the old len//3 heuristic underestimated Chinese-heavy content,
+    risking context overflow before compression triggered).
+    """
+    cjk = sum(1 for c in text if "一" <= c <= "鿿")
+    return cjk + (len(text) - cjk) // 4
 
 
 def estimate_tokens(messages: list[dict]) -> int:

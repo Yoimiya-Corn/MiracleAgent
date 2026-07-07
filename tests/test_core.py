@@ -32,7 +32,7 @@ def test_config_defaults(monkeypatch):
 
     c = Config.from_env()
     assert c.model == "gpt-5.5"
-    assert c.max_tokens == 4096
+    assert c.max_tokens == 8192
     assert c.temperature == 0.0
 
 
