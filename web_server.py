@@ -25,7 +25,7 @@ from contextlib import asynccontextmanager
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import StreamingResponse, HTMLResponse
+from fastapi.responses import StreamingResponse, HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from corecoder.agent import Agent
 from corecoder.llm import LLM
 from corecoder.config import Config
+from corecoder.tools.docx import OUTPUT_DIR as DOCX_OUTPUT_DIR
 
 
 # ────────────────────────────────────────────────────────────
@@ -296,6 +297,25 @@ def get_history(session_id: str):
 @app.get("/api/health")
 def health():
     return {"ok": True, "model": config.model}
+
+
+@app.get("/download/{filename}")
+async def download_file(filename: str):
+    """Serve generated Word documents for download."""
+    # sanitize: only alnum, dash, underscore, dot — blocks path traversal
+    safe = "".join(c for c in filename if c.isalnum() or c in "-_.")
+    if not safe.endswith(".docx"):
+        raise HTTPException(400, "Only .docx files are available for download")
+    path = (DOCX_OUTPUT_DIR / safe).resolve()
+    if not path.is_relative_to(DOCX_OUTPUT_DIR.resolve()):
+        raise HTTPException(400, "Invalid file path")
+    if not path.exists():
+        raise HTTPException(404, "File not found")
+    return FileResponse(
+        path,
+        filename=safe,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
 
 
 @app.post("/api/chat/{session_id}")

@@ -329,7 +329,11 @@ function handleSSE(event, bodyEl, assistDiv) {
     }
 
     case 'done':
-      // final text already streamed
+      // linkify download links / URLs in the final text so they're clickable
+      var finalText = bodyEl.textContent || event.content || '';
+      if (finalText) {
+        bodyEl.innerHTML = linkify(finalText);
+      }
       break;
 
     case 'error':
@@ -412,6 +416,14 @@ function handleKey(e) {
 function esc(s) {
   if (s === null || s === undefined) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function linkify(text) {
+  // escape HTML first (XSS protection), then make URLs / /download/ links clickable
+  return esc(text).replace(
+    /(https?:\/\/[^\s]+|\/download\/[A-Za-z0-9._-]+)/g,
+    '<a href="$1" target="_blank" style="color:#64b5f6;text-decoration:underline">$1</a>'
+  );
 }
 
 // ──────────────────────────────────────────────────
