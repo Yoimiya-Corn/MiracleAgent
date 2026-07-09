@@ -7,7 +7,7 @@ from corecoder.tools import ALL_TOOLS, get_tool
 
 
 def test_tool_count():
-    assert len(ALL_TOOLS) == 8
+    assert len(ALL_TOOLS) == 9
 
 
 def test_all_tools_have_valid_schema():
@@ -293,6 +293,17 @@ def test_grep_skips_junk_dirs_inside_root(tmp_path):
     r = grep.execute(pattern="needle", path=str(tmp_path))
     assert "real.py" in r
     assert "node_modules" not in r
+
+
+# --- write_docx_js ---
+
+def test_write_docx_js_schema():
+    t = get_tool("write_docx_js")
+    s = t.schema()
+    assert s["function"]["name"] == "write_docx_js"
+    props = s["function"]["parameters"]["properties"]
+    assert "filename" in props
+    assert "js_code" in props
 
 
 # --- agent tool ---

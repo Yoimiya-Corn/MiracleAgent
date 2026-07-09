@@ -3,187 +3,339 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CoreCoder Chat</title>
+<title>天奇 Agent</title>
+<link rel="preconnect" href="https://fonts.loli.net" crossorigin>
+<link href="https://fonts.loli.net/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1a1a2e;
-    --sidebar: #16213e;
-    --card: #0f3460;
-    --accent: #e94560;
-    --text: #e0e0e0;
-    --dim: #8892b0;
-    --tool-bg: #1a3a1a;
-    --tool-border: #2d5a2d;
-    --user-bg: #1e3a5f;
-    --assistant-bg: #1a1a2e;
-    --radius: 10px;
+    --bg: #f7f5f0;
+    --bg-side: #f1ede4;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-2: #4a4845;
+    --dim: #8b8680;
+    --line: #e4dfd3;
+    --line-soft: #efebe1;
+    --accent: #a93226;
+    --accent-bg: #faf0ee;
+    --tool-bg: #f4f1e9;
+    --tool-line: #d8d1bf;
+    --radius: 6px;
+    --radius-lg: 10px;
+    --serif: 'Fraunces', 'Songti SC', 'STSong', Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+    --mono: 'SF Mono', 'JetBrains Mono', Consolas, monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-    background: var(--bg); color: var(--text);
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
     display: flex; height: 100vh; overflow: hidden;
+    font-size: 15px; line-height: 1.6;
+    background-image:
+      radial-gradient(circle at 18% 28%, rgba(169,50,38,0.018), transparent 42%),
+      radial-gradient(circle at 82% 72%, rgba(60,50,40,0.012), transparent 42%);
   }
 
   /* ── Sidebar ── */
   #sidebar {
-    width: 260px; background: var(--sidebar);
+    width: 280px; background: var(--bg-side);
     display: flex; flex-direction: column;
-    border-right: 1px solid #ffffff10;
+    border-right: 1px solid var(--line);
     flex-shrink: 0;
+    animation: slideIn 0.5s cubic-bezier(.2,.7,.3,1);
   }
-  #sidebar h2 {
-    padding: 16px; font-size: 1.1rem;
-    border-bottom: 1px solid #ffffff10;
-    display: flex; align-items: center; gap: 8px;
+  @keyframes slideIn { from { transform: translateX(-18px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  .brand {
+    padding: 26px 22px 22px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 12px;
   }
-  #sidebar .logo { font-size: 1.4rem; }
-  #new-session {
-    margin: 12px; padding: 10px;
-    background: var(--accent); color: #fff; border: none;
-    border-radius: var(--radius); cursor: pointer;
-    font-size: 0.95rem; font-weight: 600;
+  .brand .seal {
+    width: 9px; height: 9px;
+    background: var(--accent);
+    align-self: center; margin-bottom: 3px;
+    box-shadow: 0 0 0 2px var(--accent-bg);
   }
-  #new-session:hover { opacity: 0.85; }
-  #session-list {
-    flex: 1; overflow-y: auto; padding: 0 8px;
-    list-style: none;
+  .brand .name {
+    font-family: var(--serif);
+    font-weight: 600; font-size: 1.4rem;
+    letter-spacing: 1px; color: var(--ink);
   }
-  #session-list li {
-    padding: 10px 12px; margin: 2px 0; border-radius: 8px;
-    cursor: pointer; font-size: 0.88rem;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  #session-list li:hover { background: #ffffff0a; }
-  #session-list li.active { background: #ffffff15; }
-  #session-list .title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
-  #session-list .del { opacity: 0; cursor: pointer; padding: 2px 6px; color: #f66; }
-  #session-list li:hover .del { opacity: 1; }
-  #status-bar {
-    padding: 10px 14px; font-size: 0.78rem; color: var(--dim);
-    border-top: 1px solid #ffffff10;
+  .brand .sub {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: 0.82rem; color: var(--dim); letter-spacing: 2px;
   }
 
-  /* ── Main chat area ── */
-  #main {
-    flex: 1; display: flex; flex-direction: column;
-    min-width: 0;
+  #new-session {
+    margin: 18px; padding: 11px;
+    background: var(--ink); color: var(--bg);
+    border: none; border-radius: var(--radius);
+    cursor: pointer; font-size: 0.9rem; font-weight: 500;
+    font-family: var(--sans);
+    transition: background 0.2s, transform 0.1s;
   }
-  #header {
-    padding: 12px 20px; border-bottom: 1px solid #ffffff10;
-    font-size: 0.85rem; color: var(--dim);
+  #new-session:hover { background: var(--accent); }
+  #new-session:active { transform: scale(0.98); }
+
+  #session-list {
+    flex: 1; overflow-y: auto; padding: 0 10px; list-style: none;
+  }
+  #session-list li {
+    padding: 10px 12px; margin: 2px 0; border-radius: var(--radius);
+    cursor: pointer; font-size: 0.86rem; color: var(--ink-2);
     display: flex; justify-content: space-between; align-items: center;
+    transition: background 0.15s, color 0.15s;
   }
+  #session-list li:hover { background: rgba(60,50,40,0.05); }
+  #session-list li.active {
+    background: var(--card); color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px var(--line-soft);
+  }
+  #session-list .title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  #session-list .del { opacity: 0; cursor: pointer; padding: 2px 6px; color: var(--accent); }
+  #session-list li:hover .del { opacity: 0.55; }
+  #session-list .del:hover { opacity: 1; }
+
+  #status-bar {
+    padding: 13px 22px; font-size: 0.74rem; color: var(--dim);
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+  }
+  #status-bar #status-model { color: var(--ink-2); }
+
+  /* ── Main ── */
+  #main {
+    flex: 1; display: flex; flex-direction: column; min-width: 0;
+    animation: fadeUp 0.6s cubic-bezier(.2,.7,.3,1);
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  #header {
+    padding: 18px 30px; border-bottom: 1px solid var(--line-soft);
+    font-size: 0.82rem; color: var(--dim);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--serif); font-style: italic;
+  }
+  #current-title { color: var(--ink-2); }
+  #cost-display { font-family: var(--mono); font-style: normal; font-size: 0.74rem; }
+
+  /* ── Control bar ── */
+  .control-bar {
+    padding: 10px 30px;
+    border-bottom: 1px solid var(--line-soft);
+    display: flex; align-items: center; gap: 16px;
+    font-size: 0.82rem;
+  }
+  .think-toggle {
+    display: flex; align-items: center; gap: 9px;
+    cursor: pointer; color: var(--ink-2); user-select: none;
+  }
+  .think-toggle input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 38px; height: 22px;
+    background: var(--line);
+    border-radius: 11px;
+    position: relative; cursor: pointer;
+    transition: background 0.25s;
+  }
+  .think-toggle input[type="checkbox"]::after {
+    content: "";
+    width: 18px; height: 18px;
+    background: #fff; border-radius: 50%;
+    position: absolute; top: 2px; left: 2px;
+    transition: transform 0.25s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .think-toggle input[type="checkbox"]:checked {
+    background: var(--accent);
+  }
+  .think-toggle input[type="checkbox"]:checked::after {
+    transform: translateX(16px);
+  }
+  .think-toggle .toggle-label { font-size: 0.84rem; }
+
   #messages {
-    flex: 1; overflow-y: auto; padding: 20px;
-    display: flex; flex-direction: column; gap: 12px;
+    flex: 1; overflow-y: auto; padding: 26px 30px;
+    display: flex; flex-direction: column; gap: 18px;
   }
 
   /* ── Message bubbles ── */
-  .msg { max-width: 85%; animation: fadeIn 0.2s; }
+  .msg { max-width: 78%; animation: msgIn 0.3s ease; }
+  @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .msg.user { align-self: flex-end; }
   .msg.assistant { align-self: flex-start; }
   .msg .role {
-    font-size: 0.72rem; font-weight: 700; margin-bottom: 4px;
-    text-transform: uppercase; letter-spacing: 0.5px;
+    font-size: 0.68rem; font-weight: 600; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 1.8px;
+    font-family: var(--mono);
   }
-  .msg.user .role { color: #64b5f6; text-align: right; }
-  .msg.assistant .role { color: #81c784; }
+  .msg.user .role { color: var(--accent); text-align: right; }
+  .msg.assistant .role { color: var(--dim); }
   .msg .body {
-    padding: 12px 16px; border-radius: var(--radius);
-    line-height: 1.55; font-size: 0.92rem;
+    padding: 12px 16px; border-radius: var(--radius-lg);
+    line-height: 1.65; font-size: 0.92rem;
     white-space: pre-wrap; word-break: break-word;
   }
-  .msg.user .body { background: var(--user-bg); }
-  .msg.assistant .body { background: var(--assistant-bg); border: 1px solid #ffffff10; }
+  .msg.user .body {
+    background: var(--card); color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid var(--line-soft);
+  }
+  .msg.assistant .body {
+    background: transparent; color: var(--ink);
+    padding: 4px 0;
+  }
+
+  /* ── Thinking fold ── */
+  .think-block {
+    margin: 10px 0; padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--tool-bg);
+    max-width: 92%;
+  }
+  .think-block summary {
+    cursor: pointer; padding: 8px 14px;
+    font-size: 0.8rem; color: var(--dim);
+    list-style: none;
+    display: flex; align-items: center; gap: 6px;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  .think-block summary::-webkit-details-marker { display: none; }
+  .think-block summary:hover { color: var(--ink-2); }
+  .think-block .think-icon { font-size: 0.95rem; }
+  .think-block .think-preview {
+    opacity: 0.55; font-size: 0.76rem;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+  }
+  .think-block .think-content {
+    padding: 0 14px 12px; font-size: 0.82rem; color: var(--dim);
+    line-height: 1.6; white-space: pre-wrap;
+    border-top: 1px solid var(--line-soft);
+    max-height: 300px; overflow-y: auto;
+  }
 
   /* ── Tool call cards ── */
   .tool-call {
-    margin: 6px 0; align-self: flex-start; max-width: 90%;
+    margin: 6px 0; align-self: flex-start;
+    max-width: 88%; width: 88%;
   }
   .tool-call summary {
-    cursor: pointer; padding: 8px 12px;
-    background: var(--tool-bg); border: 1px solid var(--tool-border);
-    border-radius: var(--radius); font-size: 0.82rem;
-    display: flex; gap: 8px; align-items: center;
+    cursor: pointer; padding: 10px 14px;
+    background: var(--tool-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.82rem;
+    display: flex; gap: 10px; align-items: center;
+    list-style: none;
+    transition: background 0.15s;
   }
-  .tool-call summary .icon { font-size: 1rem; }
-  .tool-call summary .name { font-weight: 700; color: #a5d6a7; }
-  .tool-call summary .args { color: var(--dim); font-family: monospace; font-size: 0.78rem; }
+  .tool-call summary::-webkit-details-marker { display: none; }
+  .tool-call summary:hover { background: var(--line-soft); }
+  .tool-call summary .icon { font-size: 0.95rem; }
+  .tool-call summary .name { font-weight: 600; color: var(--ink); font-family: var(--mono); font-size: 0.8rem; }
+  .tool-call summary .args { color: var(--dim); font-family: var(--mono); font-size: 0.74rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tool-call .result {
-    padding: 8px 12px; margin-top: 4px;
-    background: #0d1f0d; border-radius: 6px;
-    font-family: monospace; font-size: 0.78rem; white-space: pre-wrap;
-    max-height: 200px; overflow-y: auto;
-    color: #a0a0a0; border-left: 3px solid var(--tool-border);
+    padding: 10px 14px; margin-top: 4px;
+    background: var(--card); border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    font-family: var(--mono); font-size: 0.76rem; white-space: pre-wrap;
+    max-height: 220px; overflow-y: auto;
+    color: var(--ink-2);
   }
 
   /* ── Input area ── */
   #input-area {
-    padding: 12px 20px; border-top: 1px solid #ffffff10;
-    display: flex; gap: 10px;
+    padding: 16px 30px 22px;
+    border-top: 1px solid var(--line-soft);
+    display: flex; gap: 12px;
+    background: var(--bg);
   }
   #input-area textarea {
-    flex: 1; padding: 10px 14px; border-radius: var(--radius);
-    border: 1px solid #ffffff20; background: #111;
-    color: var(--text); font-size: 0.95rem; resize: none;
-    font-family: inherit; line-height: 1.5;
+    flex: 1; padding: 12px 16px; border-radius: var(--radius-lg);
+    border: 1px solid var(--line); background: var(--card);
+    color: var(--ink); font-size: 0.92rem; resize: none;
+    font-family: var(--sans); line-height: 1.5;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  #input-area textarea:focus { outline: none; border-color: var(--accent); }
+  #input-area textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
   #input-area button {
-    padding: 10px 20px; background: var(--accent);
-    color: #fff; border: none; border-radius: var(--radius);
-    cursor: pointer; font-weight: 600; font-size: 0.95rem;
-    white-space: nowrap;
+    padding: 12px 26px; background: var(--ink); color: var(--bg);
+    border: none; border-radius: var(--radius-lg);
+    cursor: pointer; font-weight: 500; font-size: 0.9rem;
+    font-family: var(--sans); white-space: nowrap;
+    transition: background 0.2s, transform 0.1s;
   }
+  #input-area button:hover { background: var(--accent); }
+  #input-area button:active { transform: scale(0.97); }
   #input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* ── Misc ── */
   .empty-state {
-    color: var(--dim); text-align: center; margin-top: 30vh;
-    font-size: 1.1rem;
+    color: var(--dim); text-align: center; margin-top: 28vh;
+    font-family: var(--serif); font-style: italic; font-size: 1.05rem;
   }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-  .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--dim); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; }
+  .spinner {
+    display: inline-block; width: 11px; height: 11px;
+    border: 2px solid var(--line); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    margin-left: auto;
+  }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  a:hover { border-bottom-color: var(--accent); }
 </style>
 </head>
 <body>
 
-<!-- ── Sidebar ── -->
 <div id="sidebar">
-  <h2><span class="logo">⚡</span> CoreCoder</h2>
+  <div class="brand">
+    <span class="seal"></span>
+    <span class="name">天奇</span>
+    <span class="sub">Agent</span>
+  </div>
   <button id="new-session" onclick="newSession()">＋ 新会话</button>
   <ul id="session-list"></ul>
-  <div id="status-bar">模型: <span id="status-model">—</span></div>
+  <div id="status-bar">模型 · <span id="status-model">—</span></div>
 </div>
 
-<!-- ── Main ── -->
 <div id="main">
   <div id="header">
     <span id="current-title">选择一个会话开始</span>
     <span id="cost-display"></span>
   </div>
+  <div class="control-bar">
+    <label class="think-toggle">
+      <input type="checkbox" id="think-mode" checked onchange="updateThinkConfig()">
+      <span class="toggle-label">深度思考</span>
+    </label>
+  </div>
   <div id="messages">
-    <div class="empty-state">← 新建或选择一个会话开始</div>
+    <div class="empty-state">天奇 Agent · 启程</div>
   </div>
   <div id="input-area">
-    <textarea id="user-input" rows="1" placeholder="输入消息… (Enter 发送, Shift+Enter 换行)"
-              onkeydown="handleKey(event)"></textarea>
+    <textarea id="user-input" rows="1" placeholder="输入消息… (Enter 发送, Shift+Enter 换行)" onkeydown="handleKey(event)"></textarea>
     <button id="send-btn" onclick="send()">发送</button>
   </div>
 </div>
 
 <script>
-// ──────────────────────────────────────────────────
-//  State
-// ──────────────────────────────────────────────────
 let currentSessionId = null;
 let isStreaming = false;
 
-// ──────────────────────────────────────────────────
-//  Session management
-// ──────────────────────────────────────────────────
 async function newSession() {
   const resp = await fetch('/api/sessions', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
   const data = await resp.json();
@@ -210,7 +362,6 @@ async function refreshSessions() {
 async function switchTo(sid) {
   currentSessionId = sid;
   refreshSessions();
-  // load history
   const resp = await fetch(`/api/sessions/${sid}/history`);
   const data = await resp.json();
   document.getElementById('status-model').textContent = data.model;
@@ -227,9 +378,27 @@ async function delSession(sid) {
   refreshSessions();
 }
 
-// ──────────────────────────────────────────────────
-//  Send message & SSE stream
-// ──────────────────────────────────────────────────
+function updateThinkConfig() {
+  // config is read at send time from the checkbox state — no persistence needed
+}
+
+// ── Thinking fold helper ──
+function renderFinalText(text) {
+  if (!text) return '';
+  // split by <think>...</think> blocks; each think block becomes a collapsed <details>
+  const parts = text.split(/(<think>[\s\S]*?<\/think>)/g);
+  return parts.map(function(part) {
+    const m = part.match(/^<think>([\s\S]*?)<\/think>$/);
+    if (m) {
+      const content = m[1].trim();
+      const preview = content.slice(0, 80) + (content.length > 80 ? '…' : '');
+      return '<details class="think-block"><summary><span class="think-icon">💭</span> 思考过程 <span class="think-preview">— ' + esc(preview) + '</span></summary><div class="think-content">' + esc(content) + '</div></details>';
+    }
+    // plain text segment: linkify URLs
+    return linkify(part);
+  }).join('');
+}
+
 async function send() {
   if (isStreaming) return;
   const input = document.getElementById('user-input');
@@ -242,20 +411,19 @@ async function send() {
   document.getElementById('send-btn').disabled = true;
   document.getElementById('current-title').textContent = text.slice(0, 40);
 
-  // show user bubble
   appendMessage('user', text);
 
-  // create assistant bubble placeholder for streaming
   const assistDiv = appendMessage('assistant', '');
   const bodyEl = assistDiv.querySelector('.body');
-  let fullText = '';
-  let pendingToolDiv = null;
 
   try {
     const resp = await fetch(`/api/chat/${currentSessionId}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({
+        message: text,
+        enable_thinking: document.getElementById('think-mode').checked
+      }),
     });
 
     const reader = resp.body.getReader();
@@ -267,21 +435,19 @@ async function send() {
       if (done) break;
       buf += decoder.decode(value, { stream: true });
 
-      // SSE parser: split on double-newline
       const parts = buf.split('\n\n');
-      buf = parts.pop(); // keep incomplete chunk
+      buf = parts.pop();
 
       for (const part of parts) {
         if (!part.startsWith('data: ')) continue;
         try {
           const event = JSON.parse(part.slice(6));
           handleSSE(event, bodyEl, assistDiv);
-          if (event.type === 'token') fullText += event.content;
         } catch (e) { /* skip malformed */ }
       }
     }
   } catch (err) {
-    bodyEl.textContent = `❌ 错误: ${err.message}`;
+    bodyEl.textContent = '❌ 错误: ' + err.message;
   } finally {
     isStreaming = false;
     document.getElementById('send-btn').disabled = false;
@@ -294,69 +460,51 @@ function handleSSE(event, bodyEl, assistDiv) {
   switch (event.type) {
     case 'token':
       bodyEl.textContent += event.content;
-      // scroll to bottom
       document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
       break;
 
     case 'tool_start': {
       const details = document.createElement('details');
       details.className = 'tool-call';
-      details.dataset.toolId = event.id;  // match result by id, not "first spinner"
+      details.dataset.toolId = event.id;
       details.open = true;
-      details.innerHTML = `
-        <summary>
-          <span class="icon">🔧</span>
-          <span class="name">${esc(event.name)}</span>
-          <span class="args">${esc(event.args || '')}</span>
-          <span class="spinner"></span>
-        </summary>
-        <div class="result">执行中…</div>
-      `;
+      details.innerHTML = '<summary><span class="icon">🔧</span><span class="name">' + esc(event.name) + '</span><span class="args">' + esc(event.args || '') + '</span><span class="spinner"></span></summary><div class="result">执行中…</div>';
       assistDiv.parentNode.insertBefore(details, assistDiv.nextSibling);
       break;
     }
 
     case 'tool_result': {
-      // match by tool_call id so parallel tool results don't get cross-wired
-      const details = document.querySelector(`.tool-call[data-tool-id="${event.id}"]`);
+      const details = document.querySelector('.tool-call[data-tool-id="' + event.id + '"]');
       if (details) {
         const spinner = details.querySelector('.spinner');
         if (spinner) spinner.remove();
         details.querySelector('.result').textContent = event.preview || '(无输出)';
-        details.open = false;  // auto-collapse after result
+        details.open = false;
       }
       break;
     }
 
     case 'done':
-      // linkify download links / URLs in the final text so they're clickable
       var finalText = bodyEl.textContent || event.content || '';
       if (finalText) {
-        bodyEl.innerHTML = linkify(finalText);
+        bodyEl.innerHTML = renderFinalText(finalText);
       }
       break;
 
     case 'error':
-      bodyEl.textContent += `\n\n❌ ${event.message}`;
+      bodyEl.textContent += '\n\n❌ ' + event.message;
       break;
   }
 }
 
-// ──────────────────────────────────────────────────
-//  UI helpers
-// ──────────────────────────────────────────────────
 function appendMessage(role, content) {
   const msgs = document.getElementById('messages');
-  // remove empty state
   const emp = msgs.querySelector('.empty-state');
   if (emp) emp.remove();
 
   const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.innerHTML = `
-    <div class="role">${role === 'user' ? 'You' : 'CoreCoder'}</div>
-    <div class="body">${esc(content)}</div>
-  `;
+  div.className = 'msg ' + role;
+  div.innerHTML = '<div class="role">' + (role === 'user' ? 'You' : 'Qwen') + '</div><div class="body">' + esc(content) + '</div>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   return div;
@@ -374,28 +522,23 @@ function renderHistory(messages) {
       appendMessage('user', m.content);
     } else if (m.role === 'assistant') {
       const div = appendMessage('assistant', m.content || '');
-      // show tool calls if present
+      // replace body with rendered version to fold <think> blocks from history
+      const bodyEl = div.querySelector('.body');
+      if (m.content) {
+        bodyEl.innerHTML = renderFinalText(m.content);
+      }
       if (m.tool_calls) {
         for (const tc of m.tool_calls) {
           const details = document.createElement('details');
           details.className = 'tool-call';
-          details.innerHTML = `
-            <summary>
-              <span class="icon">🔧</span>
-              <span class="name">${esc(tc.function?.name || tc.name)}</span>
-              <span class="args">${esc(JSON.stringify(tc.function?.arguments || tc.arguments || {}))}</span>
-            </summary>
-          `;
+          details.innerHTML = '<summary><span class="icon">🔧</span><span class="name">' + esc(tc.function?.name || tc.name) + '</span><span class="args">' + esc(JSON.stringify(tc.function?.arguments || tc.arguments || {})) + '</span></summary>';
           msgs.appendChild(details);
         }
       }
     } else if (m.role === 'tool') {
       const details = document.createElement('details');
       details.className = 'tool-call';
-      details.innerHTML = `
-        <summary><span class="icon">📋</span> <span class="name">工具结果</span></summary>
-        <div class="result">${esc((m.content || '').slice(0, 500))}</div>
-      `;
+      details.innerHTML = '<summary><span class="icon">📋</span> <span class="name">工具结果</span></summary><div class="result">' + esc((m.content || '').slice(0, 500)) + '</div>';
       msgs.appendChild(details);
     }
   }
@@ -419,16 +562,12 @@ function esc(s) {
 }
 
 function linkify(text) {
-  // escape HTML first (XSS protection), then make URLs / /download/ links clickable
   return esc(text).replace(
     /(https?:\/\/[^\s]+|\/download\/[A-Za-z0-9._-]+)/g,
-    '<a href="$1" target="_blank" style="color:#64b5f6;text-decoration:underline">$1</a>'
+    '<a href="$1" target="_blank">$1</a>'
   );
 }
 
-// ──────────────────────────────────────────────────
-//  Init
-// ──────────────────────────────────────────────────
 refreshSessions();
 document.getElementById('user-input').focus();
 </script>

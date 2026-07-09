@@ -112,6 +112,7 @@ class LLM:
         messages: list[dict],
         tools: list[dict] | None = None,
         on_token=None,
+        enable_thinking: bool | None = None,
     ) -> LLMResponse:
         """Send messages, stream back response, handle tool calls."""
         params: dict = {
@@ -120,6 +121,10 @@ class LLM:
             "stream": True,
             **self.extra,
         }
+        if enable_thinking is not None:
+            params.setdefault("extra_body", {})
+            params["extra_body"].setdefault("chat_template_kwargs", {})
+            params["extra_body"]["chat_template_kwargs"]["enable_thinking"] = enable_thinking
         if tools:
             params["tools"] = tools
 
@@ -242,6 +247,7 @@ class LiteLLM(LLM):
         messages: list[dict],
         tools: list[dict] | None = None,
         on_token=None,
+        enable_thinking: bool | None = None,
     ) -> LLMResponse:
         """Send messages via litellm, stream back response, handle tool calls."""
         params: dict = {
@@ -250,6 +256,10 @@ class LiteLLM(LLM):
             "stream": True,
             **self.extra,
         }
+        if enable_thinking is not None:
+            params.setdefault("extra_body", {})
+            params["extra_body"].setdefault("chat_template_kwargs", {})
+            params["extra_body"]["chat_template_kwargs"]["enable_thinking"] = enable_thinking
         if tools:
             params["tools"] = tools
 

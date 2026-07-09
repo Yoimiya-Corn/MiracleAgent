@@ -243,6 +243,7 @@ _executor = ThreadPoolExecutor(max_workers=16)
 # ────────────────────────────────────────────────────────────
 class ChatRequest(BaseModel):
     message: str
+    enable_thinking: bool = True
 
 
 class SessionCreate(BaseModel):
@@ -340,6 +341,7 @@ async def chat(session_id: str, body: ChatRequest):
 
     try:
         agent = sessions.get_or_create_agent(session_id, emit)
+        agent.enable_thinking = body.enable_thinking
     except KeyError:
         raise HTTPException(404, "Session not found")
 

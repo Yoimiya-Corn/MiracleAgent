@@ -34,6 +34,7 @@ class Agent:
         self.context = ContextManager(max_tokens=max_context_tokens)
         self.max_rounds = max_rounds
         self._system = system_prompt(self.tools)
+        self.enable_thinking: bool | None = None
 
         # wire up sub-agent capability
         for t in self.tools:
@@ -56,6 +57,7 @@ class Agent:
                 messages=self._full_messages(),
                 tools=self._tool_schemas(),
                 on_token=on_token,
+                enable_thinking=self.enable_thinking,
             )
 
             # no tool calls -> LLM is done, return text
