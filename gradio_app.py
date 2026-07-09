@@ -1,5 +1,5 @@
 """
-CoreCoder Gradio Chat — 可直接嵌入现有的 Gradio 页面。
+Miracle Agent Gradio Chat — 可直接嵌入现有的 Gradio 页面。
 
 Usage:
     python gradio_app.py
@@ -22,9 +22,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import gradio as gr
-from corecoder.agent import Agent
-from corecoder.llm import LLM
-from corecoder.config import Config
+from miracle_agent.agent import Agent
+from miracle_agent.llm import LLM
+from miracle_agent.config import Config
 
 
 def _build_llm() -> LLM:
@@ -130,8 +130,8 @@ def _create_app() -> gr.Blocks:
     .tool-log { color: #6b8; font-family: monospace; font-size: 0.85em; }
     footer { visibility: hidden; }
     """
-    with gr.Blocks(css=css, title="CoreCoder Chat") as app:
-        gr.Markdown("## ⚡ CoreCoder Agent Chat")
+    with gr.Blocks(css=css, title="Miracle Agent Chat") as app:
+        gr.Markdown("## ⚡ Miracle Agent Agent Chat")
         gr.Markdown(f"模型: **{_build_llm().model}** | 支持工具调用 + 流式输出")
 
         # type='messages' is the Gradio 5.x default and works on 4.x too
@@ -183,7 +183,7 @@ def main():
     cfg = Config.from_env()
     print(f"""
 ══════════════════════════════════════════════
-  CoreCoder Gradio Chat
+  Miracle Agent Gradio Chat
   Model : {cfg.model}
   Base  : {cfg.base_url}
   Addr  : http://0.0.0.0:7860

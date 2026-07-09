@@ -5,7 +5,7 @@ features python-docx can't do well: tables of contents, tables, images,
 headers/footers, page numbers, multi-column layouts.
 
 Requires Node.js + `npm install -g docx` on the server. Set
-CORECODER_NODE_PATH to the global node_modules dir (e.g.
+MIRACLE_NODE_PATH to the global node_modules dir (e.g.
 /opt/node/lib/node_modules) so `require('docx')` resolves.
 """
 
@@ -18,7 +18,7 @@ from pathlib import Path
 
 from .base import Tool
 
-OUTPUT_DIR = Path(os.getenv("CORECODER_OUTPUT_DIR", str(Path.home() / ".corecoder" / "docs")))
+OUTPUT_DIR = Path(os.getenv("MIRACLE_OUTPUT_DIR", str(Path.home() / ".miracle_agent" / "docs")))
 
 _SAFE_NAME = re.compile(r"[^A-Za-z0-9_-]+")
 
@@ -114,7 +114,7 @@ class WriteDocxJsTool(Tool):
         # read at call time, not import time — .env is loaded by Config.from_env()
         # which runs after this module is imported, so a module-level constant
         # would capture an empty value.
-        node_path = os.getenv("CORECODER_NODE_PATH", "")
+        node_path = os.getenv("MIRACLE_NODE_PATH", "")
         if node_path:
             env["NODE_PATH"] = node_path
 

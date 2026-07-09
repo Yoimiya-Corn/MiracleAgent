@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "corecoder"
+name = "miracle_agent"
 version = "0.4.0"
 description = "Minimal AI coding agent (~1,000 lines of Python) inspired by Claude Code. Works with any LLM. (formerly NanoCoder)"
 readme = "README.md"
@@ -35,7 +35,7 @@ dependencies = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["corecoder"]
+packages = ["miracle_agent"]
 
 [project.optional-dependencies]
 litellm = ["litellm>=1.60.0,<2.0.0"]
@@ -43,12 +43,12 @@ web = ["fastapi>=0.100", "uvicorn>=0.20", "python-docx>=1.0"]
 dev = ["pytest>=7.0", "ruff>=0.9.0"]
 
 [project.scripts]
-corecoder = "corecoder.cli:main"
+miracle_agent = "miracle_agent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/he-yufeng/CoreCoder"
-Repository = "https://github.com/he-yufeng/CoreCoder"
-Issues = "https://github.com/he-yufeng/CoreCoder/issues"
+Homepage = "https://github.com/he-yufeng/Miracle Agent"
+Repository = "https://github.com/he-yufeng/Miracle Agent"
+Issues = "https://github.com/he-yufeng/Miracle Agent/issues"
 
 [tool.ruff]
 line-length = 130

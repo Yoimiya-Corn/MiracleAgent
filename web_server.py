@@ -1,11 +1,11 @@
 """
-CoreCoder Web Server — FastAPI + SSE streaming + multi-user session management.
+Miracle Agent Web Server — FastAPI + SSE streaming + multi-user session management.
 
 Usage:
     # 配好 vLLM 地址
     set OPENAI_BASE_URL=http://your-vllm-server:8000/v1
     set OPENAI_API_KEY=vllm
-    set CORECODER_MODEL=Qwen/Qwen3-32B
+    set MIRACLE_MODEL=Qwen/Qwen3-32B
 
     # 启动
     python web_server.py --port 8080
@@ -31,10 +31,10 @@ from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from corecoder.agent import Agent
-from corecoder.llm import LLM
-from corecoder.config import Config
-from corecoder.tools.docx import OUTPUT_DIR as DOCX_OUTPUT_DIR
+from miracle_agent.agent import Agent
+from miracle_agent.llm import LLM
+from miracle_agent.config import Config
+from miracle_agent.tools.docx import OUTPUT_DIR as DOCX_OUTPUT_DIR
 
 
 # ────────────────────────────────────────────────────────────
@@ -227,7 +227,7 @@ async def lifespan(app: FastAPI):
 
 
 # ── app setup ───────────────────────────────────────────────
-app = FastAPI(title="CoreCoder Web", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Miracle Agent Web", version="0.1.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -411,7 +411,7 @@ async def index():
 # ────────────────────────────────────────────────────────────
 def main():
     global config
-    parser = argparse.ArgumentParser(description="CoreCoder Web Server")
+    parser = argparse.ArgumentParser(description="Miracle Agent Web Server")
     parser.add_argument("--host", default="0.0.0.0", help="Bind address")
     parser.add_argument("--port", type=int, default=8080, help="Bind port")
     parser.add_argument("--model", help="Override model name")
@@ -432,7 +432,7 @@ def main():
 
     print(f"""
 ══════════════════════════════════════════════
-  CoreCoder Web Server
+  Miracle Agent Web Server
   Model : {config.model}
   Base  : {config.base_url}
   Addr  : http://{args.host}:{args.port}

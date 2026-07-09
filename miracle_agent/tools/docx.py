@@ -1,8 +1,8 @@
 """Word document generation tool.
 
 Generates a .docx file from markdown-ish text and returns a download link.
-The file is saved to a configurable output directory (CORECODER_OUTPUT_DIR,
-default ~/.corecoder/docs/) and served by the web server's /download/ route.
+The file is saved to a configurable output directory (MIRACLE_OUTPUT_DIR,
+default ~/.miracle_agent/docs/) and served by the web server's /download/ route.
 """
 
 import os
@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .base import Tool
 
-OUTPUT_DIR = Path(os.getenv("CORECODER_OUTPUT_DIR", str(Path.home() / ".corecoder" / "docs")))
+OUTPUT_DIR = Path(os.getenv("MIRACLE_OUTPUT_DIR", str(Path.home() / ".miracle_agent" / "docs")))
 
 # sanitize filename: keep alnum, dash, underscore only
 _SAFE_NAME = re.compile(r"[^A-Za-z0-9_-]+")
