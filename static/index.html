@@ -504,7 +504,7 @@ function appendMessage(role, content) {
 
   const div = document.createElement('div');
   div.className = 'msg ' + role;
-  div.innerHTML = '<div class="role">' + (role === 'user' ? 'You' : 'Qwen') + '</div><div class="body">' + esc(content) + '</div>';
+  div.innerHTML = '<div class="role">' + (role === 'user' ? 'You' : 'Miracle Agent') + '</div><div class="body">' + esc(content) + '</div>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   return div;
